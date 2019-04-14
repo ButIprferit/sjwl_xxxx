@@ -77,6 +77,8 @@ tensorboarddir='logs'
 modeldir=os.path.join(root_dir,modelname)
 if not os.path.exists(modeldir):
     os.mkdir(modeldir)
+if not os.path.exists(modeldir+'/'+'weights'):
+    os.mkdir(modeldir+'/'+'weights')
 if not os.path.exists(modeldir+'/'+tensorboarddir):
     os.mkdir(modeldir+'/'+tensorboarddir)
 
@@ -154,7 +156,7 @@ sgd=SGD(lr=0.001,decay=1e-4,momentum=0.9,nesterov=True)
 
 adam=Adam(lr=0.001,decay=0.0001)
 
-modelcheck=ModelCheckpoint(filepath=modeldir+'/best-model.hdf5',monitor='val_loss',save_best_only=True,save_weights_only=True)
+modelcheck=ModelCheckpoint(filepath=modeldir+'/'+'weights'+'/***************.hdf5',monitor='val_loss',save_weights_only=True)
 csvlog=CSVLogger(filename=modeldir+'/csv_path.csv',separator=',',append=True)
 earstop=EarlyStopping(patience=15,monitor='val_loss')
 
@@ -170,13 +172,13 @@ model.compile(loss=categorical_crossentropy,
 
 
 # Train model
-nb_epochs=50
-if os.path.exists(modeldir+'/'+weightsname) and (not weightsname==None):
-    model.load_weights(modeldir+'/'+weightsname)
+nb_epochs=config.nb_epochs
+if os.path.exists(modeldir+'/'+'weights'+'/'+weightsname) and (not weightsname==None):
+    model.load_weights(modeldir+'/'+'weights'+'/'+weightsname)
     print('---model weights load successfull---')
-    print('---'+modeldir+'/'+weightsname+'---')
+    print('---'+modeldir+'/'+'weights'+'/'+weightsname+'---')
 else:
-    print('----------not load weihts-----------')
+    print('----------not load weihts!!!!!!!!!-----------')
 
 history = model.fit_generator(
             train_gen,
