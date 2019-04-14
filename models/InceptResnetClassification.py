@@ -3,7 +3,7 @@ from keras import Input,Model
 from keras.layers import Dense,Dropout,BatchNormalization,Activation
 from keras.regularizers import l2
 from utils.dlayers import *
-def Inceptresclass(input_shape=(762//2,1024//2,3),classes=21,droprate=0.4,kernel_regu_rate=0.00001):
+def InceptresClass(input_shape=(762//2,1024//2,3),classes=21,droprate=0.4,kernel_regu_rate=0.00001):
     inceresnet = InceptionResNetV2(include_top=False,
                               weights='imagenet',
                               input_tensor=None,

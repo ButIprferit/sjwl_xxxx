@@ -21,8 +21,6 @@ def XceptionClass(input_shape=(762//2,1024//2,3),classes=21,droprate=0.4,kernel_
     x=BatchNormal(x)
     x=Dense(classes, activation='softmax', name='out')(x)
     model=Model(xception_model.inputs,x)
-    for l in model.layers:
-        l.kernel_regularizer=l2(kernel_regu_rate)
     return model
 
 if __name__=='__main__':

@@ -145,7 +145,8 @@ def lab(image):
 
 def function_line(Image):
     # its finall tool
-    funct_list=[lab,tiue,add_noise,adjust_gamma]
+    funct_list=[add_noise,adjust_gamma]
+    Image=lab(Image)
     for i in range(len(funct_list)):
         if random.random()>0.7:
             Image=funct_list[i](Image)

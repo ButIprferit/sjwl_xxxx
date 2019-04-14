@@ -86,7 +86,7 @@ def focal_loss(classes_num, gamma=2., alpha=.25, e=0.1):
         return fianal_loss
     return focal_loss_fixed
 
-
+from keras.losses import categorical_crossentropy
 
 
 # TODO
