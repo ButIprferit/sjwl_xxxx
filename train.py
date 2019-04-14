@@ -152,7 +152,7 @@ model=modeldict[modelname](input_shape=(img_h,img_w,3),classes=nb_classes,dropra
 if num_gpu>1:
     model=multi_gpu_model(model,num_gpu)
 
-sgd=SGD(lr=0.001,decay=1e-4,momentum=0.9,nesterov=True)
+sgd=SGD(lr=0.001,decay=1e-3,momentum=0.9,nesterov=True)
 
 adam=Adam(lr=0.001,decay=0.0001)
 
