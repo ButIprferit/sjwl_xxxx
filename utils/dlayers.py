@@ -93,3 +93,21 @@ def channel_spatial_squeeze_excite(input, ratio=16):
 
     x = add([cse, sse])
     return x
+
+class MYLAYER(Layer):
+    def __init__(self,**kwargs):
+        super(MYLAYER, self).__init__(**kwargs)
+    def build(self, input_shape):
+        self.w=self.add_weight(name='tempature',
+                                       shape=[1],
+                                       initializer='ones',
+                                       trainable=True)
+        self.b=self.add_weight(name='tempature',
+                                       shape=[1],
+                                       initializer='zeros',
+                                       trainable=True)
+        super(MYLAYER,self).build(input_shape)
+    def call(self, inputs, **kwargs):
+        return tf.add(tf.multiply(inputs, self.w),self.b)
+    def compute_output_shape(self, input_shape):
+        return input_shape

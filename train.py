@@ -41,15 +41,21 @@ from utils.CallBacks import *
 import utils.config
 # Any results you write to the current directory are saved as output.
 from utils.ImageAugementation import function_line
-from utils.config import modeldict
+from utils.config import config
+from utils.config import config
+from utils.Mertics import MacroF1
+modeldict=config.modeldict
 
-dataset_dir=config.dataset_dir
 
-root_dir=config.dataset_dir.root_dir
 
 train_images_dir=config.train_images_dir
 
+dataset_dir=config.dataset_dir
+
+root_dir=config.root_dir
+
 train_csv_path=config.train_csv_path
+print(train_csv_path)
 
 test_images_dir=config.test_images_dir
 
@@ -74,7 +80,9 @@ nb_classes =config.nb_classes
 lr=config.lr
 
 tensorboarddir='logs'
-modeldir=os.path.join(root_dir,modelname)
+modeldir=os.path.join(root_dir,'modelinfo',modelname)
+if not os.path.exists(root_dir+'/modelinfo'):
+    os.mkdir(root_dir+'/modelinfo')
 if not os.path.exists(modeldir):
     os.mkdir(modeldir)
 if not os.path.exists(modeldir+'/'+'weights'):
@@ -84,7 +92,7 @@ if not os.path.exists(modeldir+'/'+tensorboarddir):
 
 
 train_l=os.listdir(train_images_dir)
-print(len(train_l))
+print('train length',len(train_l))
 train_df = pd.read_csv(train_csv_path,dtype = {'category_id': str})
 print(train_df.shape)
 
@@ -92,7 +100,6 @@ test_l=os.listdir(test_images_dir)
 print(len(test_l))
 test_df = pd.read_csv(test_csv_path)
 print(test_df.shape)
-
 train_df.describe()
 train_df['category_id'] = train_df['category_id'].astype(str)
 h=train_df['category_id'].value_counts()
@@ -102,9 +109,9 @@ print(h.dtypes)
 h.plot(kind='bar')
 
 test_df.head()
-test_df.describe()
+print test_df.describe()
 train_df.head()
-train_df.describe()
+print train_df.describe()
 
 
 
@@ -120,7 +127,7 @@ datagen = ImageDataGenerator(
     horizontal_flip=True,
     vertical_flip=False,
     rescale=1.0/255.0,
-    preprocessing_function=function_line,
+    preprocessing_function=None,
     validation_split=0.1)
 
 train_gen=datagen.flow_from_dataframe(
@@ -156,7 +163,7 @@ sgd=SGD(lr=lr,decay=1e-3,momentum=0.9,nesterov=True)
 
 adam=Adam(lr=lr,decay=0.0001)
 
-modelcheck=ModelCheckpoint(filepath=modeldir+'/'+'weights'+'/***************.hdf5',monitor='val_loss',save_weights_only=True)
+modelcheck=ModelCheckpoint(filepath=modeldir+'/'+'weights'+'/{epoch:02d}-{val_loss:.2f}-{loss:.2f}.h5',monitor='val_loss',save_weights_only=True)
 csvlog=CSVLogger(filename=modeldir+'/csv_path.csv',separator=',',append=True)
 earstop=EarlyStopping(patience=15,monitor='val_loss')
 
@@ -173,7 +180,8 @@ model.compile(loss=categorical_crossentropy,
 
 # Train model
 nb_epochs=config.nb_epochs
-if os.path.exists(modeldir+'/'+'weights'+'/'+weightsname) and (not weightsname==None):
+
+if os.path.exists(modeldir+'/'+'weights'+'/'+str(weightsname)) and (not weightsname==None):
     model.load_weights(modeldir+'/'+'weights'+'/'+weightsname)
     print('---model weights load successfull---')
     print('---'+modeldir+'/'+'weights'+'/'+weightsname+'---')
@@ -191,5 +199,7 @@ history = model.fit_generator(
             callbacks=[modelcheck,
                        csvlog,earstop,
                        TensorBoard(modeldir+'/'+tensorboarddir,
-                                   write_graph=True),lrreduce,Macro_f1],
+                                   write_graph=True),
+                       lrreduce
+                       ],
             verbose=1)

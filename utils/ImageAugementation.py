@@ -60,7 +60,6 @@ def CreateNewImg(img):
 
 def add_noise(ndarray):
     ntime=random.randint(10,150)
-    print ntime
     for i in range(ntime):
         y=random.randint(5,ndarray.shape[0]-5)
         x= random.randint(5, ndarray.shape[1] - 5)

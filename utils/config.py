@@ -3,40 +3,46 @@
 from models.Xception_Classification import XceptionClass
 from models.NASLARGE_Classification import NASLARGEClass
 from models.InceptResnetClassification import InceptresClass
+class config_par(object):
+    def __init__(self):
 
-num_gpu=1
 
-droprate=0.4
+        self.num_gpu=1
 
-kernel_re=0.000001
+        self.droprate=0.4
 
-nb_classes = 14
+        self.kernel_re=0.000001
 
-modelname='Xception'
+        self.nb_classes = 14
 
-modeldict={'Xception':XceptionClass,
-           'NASLARGEClass':NASLARGEClass,
-           'InceptResnetClass':InceptresClass
-           }
+        self.modelname='Xception'
 
-lr=0.01
+        self.modeldict={'Xception':XceptionClass,
+                   'NASLARGEClass':NASLARGEClass,
+                   'InceptResnetClass':InceptresClass
+                   }
 
-img_h,img_w=762//2,1024//2
+        self.lr=0.01
 
-batch_size=16
+        self.img_h=762//2
+        self.img_w=1024//2
 
-nb_epochs=50
+        self.batch_size=8
 
-dataset_dir='/Disk4/xkp/dataset/iwilddata'
+        self.nb_epochs=50
 
-root_dir='/Disk4/xkp/project/sjwl_xxxx'
+        self.dataset_dir='/Disk4/xkp/dataset/iwilddata'
 
-train_images_dir=dataset_dir+'/train_images'
+        self.root_dir='/Disk4/xkp/project/sjwl_xxxx'
 
-train_csv_path=dataset_dir+'/train.csv'
+        self.train_images_dir=self.dataset_dir+'/train_images'
 
-test_images_dir=dataset_dir+'/test_images'
+        self.train_csv_path=self.dataset_dir+'/train.csv'
 
-test_csv_path=dataset_dir+'/test.csv'
+        self.test_images_dir=self.dataset_dir+'/test_images'
 
-weightsname=None
+        self.test_csv_path=self.dataset_dir+'/test.csv'
+
+        self.weightsname=None
+
+config=config_par()
