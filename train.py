@@ -191,5 +191,5 @@ history = model.fit_generator(
             callbacks=[modelcheck,
                        csvlog,earstop,
                        TensorBoard(modeldir+'/'+tensorboarddir,
-                                   write_graph=True),lrreduce],
+                                   write_graph=True),lrreduce,Macro_f1],
             verbose=1)
