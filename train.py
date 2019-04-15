@@ -193,10 +193,3 @@ history = model.fit_generator(
                        TensorBoard(modeldir+'/'+tensorboarddir,
                                    write_graph=True),lrreduce],
             verbose=1)
-
-
-
-
-
-
-
