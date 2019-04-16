@@ -17,7 +17,7 @@ from keras.backend.tensorflow_backend import set_session
 config = tf.ConfigProto()
 config.gpu_options.per_process_gpu_memory_fraction = 0.4
 set_session(tf.Session(config=config))
-
+import time
 import json
 from tqdm import tqdm, tqdm_notebook
 from keras.models import Sequential
@@ -106,7 +106,7 @@ h=train_df['category_id'].value_counts()
 
 print(h.dtypes)
 
-h.plot(kind='bar')
+# h.plot(kind='bar')
 
 test_df.head()
 print test_df.describe()

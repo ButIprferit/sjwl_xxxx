@@ -14,9 +14,9 @@ import os
 os.environ["CUDA_VISIBLE_DEVICES"]='1'
 import tensorflow as tf
 from keras.backend.tensorflow_backend import set_session
-config = tf.ConfigProto()
-config.gpu_options.per_process_gpu_memory_fraction = 0.4
-set_session(tf.Session(config=config))
+# config = tf.ConfigProto()
+# config.gpu_options.per_process_gpu_memory_fraction = 0.5
+# set_session(tf.Session(config=config))
 
 import json
 from tqdm import tqdm, tqdm_notebook
@@ -26,6 +26,7 @@ from keras.layers import Dropout
 from keras.layers.convolutional import Conv2D, MaxPooling2D
 from keras.utils import np_utils
 from keras.optimizers import SGD
+from utils.ImageAugementation import lab,test_function
 from keras.preprocessing import image
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications import VGG16
@@ -106,28 +107,28 @@ h=train_df['category_id'].value_counts()
 
 print(h.dtypes)
 
-h.plot(kind='bar')
+# h.plot(kind='bar')
 
 test_df.head()
-print test_df.describe()
+print(test_df.describe())
 train_df.head()
-print train_df.describe()
+print(train_df.describe())
 
 
 
 datagen = ImageDataGenerator(
 #     zca_whitening=True,
-    rotation_range=40,
+    rotation_range=20,
     width_shift_range=0.2,
     height_shift_range=0.2,
     shear_range=0.2,
     zoom_range=0.2,
-    fill_mode='nearest',
+    fill_mode='wrap',
     cval=0.0,
     horizontal_flip=True,
-    vertical_flip=False,
+    vertical_flip=True,
     rescale=1.0/255.0,
-    preprocessing_function=None,
+    preprocessing_function=function_line,
     validation_split=0.1)
 
 train_gen=datagen.flow_from_dataframe(
@@ -165,14 +166,16 @@ adam=Adam(lr=lr,decay=0.0001)
 
 modelcheck=ModelCheckpoint(filepath=modeldir+'/'+'weights'+'/{epoch:02d}-{val_loss:.2f}-{loss:.2f}.h5',monitor='val_loss',save_weights_only=True)
 csvlog=CSVLogger(filename=modeldir+'/csv_path.csv',separator=',',append=True)
-earstop=EarlyStopping(patience=15,monitor='val_loss')
+earstop=EarlyStopping(patience=15,monitor='loss')
 
 
 
 model.summary()
 
-
-model.compile(loss=categorical_crossentropy,
+# TODO next we will use focal_loss train model
+from utils.losses import focal_loss
+focalloss=focal_loss(classes_num=nb_classes)
+model.compile(loss=focalloss,
               optimizer=sgd,
               metrics=['accuracy',f1])
 
@@ -190,10 +193,10 @@ else:
 
 history = model.fit_generator(
             train_gen,
-            steps_per_epoch = (train_gen.samples // batch_size)//10,
+            steps_per_epoch = (train_gen.samples // batch_size)//3,
 #           steps_per_epoch = 100,
             validation_data = val_gen,
-            validation_steps = (val_gen.samples // batch_size)//200,
+            validation_steps = (val_gen.samples // batch_size)//3,
 #           validation_steps = 50,
             epochs = nb_epochs,
             callbacks=[modelcheck,
@@ -202,4 +205,5 @@ history = model.fit_generator(
                                    write_graph=True),
                        lrreduce
                        ],
+            workers=10,
             verbose=1)

@@ -1,7 +1,7 @@
 # this script is define the parmeta
 
 from models.Xception_Classification import XceptionClass
-from models.NASLARGE_Classification import NASLARGEClass
+from models.NASLARGE_Classification import NASNetClass
 from models.InceptResnetClassification import InceptresClass
 class config_par(object):
     def __init__(self):
@@ -9,7 +9,7 @@ class config_par(object):
 
         self.num_gpu=1
 
-        self.droprate=0.4
+        self.droprate=0.5
 
         self.kernel_re=0.000001
 
@@ -18,16 +18,16 @@ class config_par(object):
         self.modelname='Xception'
 
         self.modeldict={'Xception':XceptionClass,
-                   'NASLARGEClass':NASLARGEClass,
+                   'NASLARGEClass':NASNetClass,
                    'InceptResnetClass':InceptresClass
                    }
 
-        self.lr=0.01
+        self.lr=0.001
 
         self.img_h=762//2
         self.img_w=1024//2
 
-        self.batch_size=8
+        self.batch_size=80
 
         self.nb_epochs=50
 
@@ -43,6 +43,6 @@ class config_par(object):
 
         self.test_csv_path=self.dataset_dir+'/test.csv'
 
-        self.weightsname=None
+        self.weightsname='17-0.94-0.89.h5'
 
 config=config_par()

@@ -45,7 +45,7 @@ def f1(y_true, y_pred):
 
 def MacroF1(y_true,y_pred):
     val_predict = np.argmax(np.asarray(y_pred),)
-    print np.asarray(y_true).shape
+    print(np.asarray(y_true).shape)
     #         val_targ = self.validation_data[1]
     val_targ = np.argmax(np.asarray(y_true),axis=0)
     _val_f1 = f1_score(val_targ, val_predict, average='macro')

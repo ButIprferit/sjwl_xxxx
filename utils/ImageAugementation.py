@@ -124,8 +124,10 @@ def apply_brightness_contrast(input_img, brightness = 0, contrast = 0):
 
 def lab(image):
     #### it work very well
+    # image=np.array(image,np.uint8)
     lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
-    cv2.imshow("lab", lab)
+    # cv2.imshow("lab", lab)
+    # cv2.waitKey(0)
 
     # -----Splitting the LAB image to different channels-------------------------
     l, a, b = cv2.split(lab)
@@ -140,27 +142,42 @@ def lab(image):
 
     # -----Converting image from LAB Color model to RGB model--------------------
     final = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
+    # final=np.array(final,np.float32)
+    # cv2.imshow("lab", final)
+    # cv2.waitKey(0)
     return final
 
 def function_line(Image):
     # its finall tool
-    funct_list=[add_noise,adjust_gamma]
+    # print(Image.dtype)
+    Image=np.array(Image,np.uint8)
+    funct_list=[add_noise]
     Image=lab(Image)
+
     for i in range(len(funct_list)):
         if random.random()>0.7:
             Image=funct_list[i](Image)
+            # cv2.imshow('after'+str(i),Image)
+            # cv2.waitKey(0)
+    Image = np.array(Image, np.float32)
     return Image
 
-
-
+def test_function(Image):
+    print(Image.dtype)
+    return Image
 
 if __name__=='__main__':
-    pass
-    #
-    # image=cv2.imread('/home/cooper/paper/2.png')
+    image=cv2.imread('/Disk4/xkp/dataset/1.jpg')
+    # image=np.array(image,np.float32)
     # image=lab(image)
-    # cv2.imshow('image',image)
-    # cv2.waitKey(0)
+    # print(image.dtype)
+
+    image=lab(image)
+    cv2.imshow('duibidu',image)
+
+    # image=adjust_gamma(image)
+    # cv2.imshow('gamma',image)
+    cv2.waitKey(0)
 
 
 
