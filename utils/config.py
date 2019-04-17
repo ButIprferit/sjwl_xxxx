@@ -3,6 +3,7 @@
 from models.Xception_Classification import XceptionClass
 from models.NASLARGE_Classification import NASNetClass
 from models.InceptResnetClassification import InceptresClass
+from models.Xception_spp import XceptionsppClass
 class config_par(object):
     def __init__(self):
 
@@ -19,7 +20,8 @@ class config_par(object):
 
         self.modeldict={'Xception':XceptionClass,
                    'NASLARGEClass':NASNetClass,
-                   'InceptResnetClass':InceptresClass
+                   'InceptResnetClass':InceptresClass,
+                        'XceptionSPP':XceptionsppClass
                    }
 
         self.lr=0.0001
