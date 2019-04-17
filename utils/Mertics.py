@@ -59,12 +59,26 @@ def MacroF1(y_true,y_pred):
   #  print(' — val_f1:', _val_f1)
     return _val_f1
 
-def MAP(y_true,y_pre):
+def MAP(classes):
     '''
 
     :param y_true:
     :param y_pre:
     :return: the mean average precision value
     '''
-    map,_=tf.metrics.average_precision_at_k(y_true,y_pre)
-    return map
+    def map_funct(y_true,y_pre):
+        map,_=tf.metrics.sparse_average_precision_at_k(y_true,y_pre,k=classes)
+        return map
+    return map_funct
+
+def calculate_mAP(y_true,y_pred):
+    num_classes = y_true.shape[1]
+    average_precisions = []
+    relevant = K.sum(K.round(K.clip(y_true, 0, 1)))
+    tp_whole = K.round(K.clip(y_true * y_pred, 0, 1))
+    for index in range(num_classes):
+        temp = K.sum(tp_whole[:,:index+1],axis=1)
+        average_precisions.append(temp * (1/(index + 1)))
+    AP = Add()(average_precisions) / relevant
+    mAP = K.mean(AP,axis=0)
+    return mAP
