@@ -119,8 +119,8 @@ print(train_df.describe())
 datagen = ImageDataGenerator(
 #     zca_whitening=True,
     rotation_range=20,
-    width_shift_range=0.2,
-    height_shift_range=0.2,
+    width_shift_range=0.1,
+    height_shift_range=0.1,
     shear_range=0.2,
     zoom_range=0.2,
     fill_mode='wrap',
@@ -128,7 +128,7 @@ datagen = ImageDataGenerator(
     horizontal_flip=True,
     vertical_flip=True,
     rescale=1.0/255.0,
-    preprocessing_function=function_line,
+    preprocessing_function=None,
     validation_split=0.1)
 
 train_gen=datagen.flow_from_dataframe(
@@ -175,7 +175,7 @@ model.summary()
 # TODO next we will use focal_loss train model
 from utils.losses import focal_loss
 focalloss=focal_loss(classes_num=nb_classes)
-model.compile(loss=focalloss,
+model.compile(loss=categorical_crossentropy,
               optimizer=sgd,
               metrics=['accuracy',f1])
 

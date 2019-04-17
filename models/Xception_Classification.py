@@ -15,7 +15,7 @@ def XceptionClass(input_shape=(762//2,1024//2,3),classes=21,droprate=0.5,kernel_
                               input_shape=input_shape,
                               pooling='max',
                               classes=1000)
-    xception_model.trainable = False
+    # xception_model.trainable = False
     model = Sequential()
     model.add(xception_model)
     model.add(Dropout(0.3))

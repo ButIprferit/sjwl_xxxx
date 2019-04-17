@@ -9,7 +9,7 @@ class config_par(object):
 
         self.num_gpu=1
 
-        self.droprate=0.5
+        self.droprate=0.4
 
         self.kernel_re=0.000001
 
@@ -22,12 +22,12 @@ class config_par(object):
                    'InceptResnetClass':InceptresClass
                    }
 
-        self.lr=0.001
+        self.lr=0.0001
 
         self.img_h=762//2
         self.img_w=1024//2
 
-        self.batch_size=80
+        self.batch_size=8
 
         self.nb_epochs=50
 

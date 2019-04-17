@@ -2,6 +2,7 @@
 from keras.callbacks import Callback
 from sklearn.metrics import f1_score
 import numpy as np
+import tensorflow as tf
 def get_lr_metric(optimizer):
     '''
     return the learn rate of the train process
@@ -57,3 +58,13 @@ def MacroF1(y_true,y_pred):
     #       print('— val_f1: %f — val_precision: %f — val_recall %f' %(_val_f1, _val_precision, _val_recall))
   #  print(' — val_f1:', _val_f1)
     return _val_f1
+
+def MAP(y_true,y_pre):
+    '''
+
+    :param y_true:
+    :param y_pre:
+    :return: the mean average precision value
+    '''
+    map,_=tf.metrics.average_precision_at_k(y_true,y_pre)
+    return map
